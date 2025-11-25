@@ -24,10 +24,18 @@ export const login = async (req, res, next) => {
 
     const entries = await userdb.lookup(username);
 
-    if (!Array.isArray(entries) || entries.length === 0) {
-      console.log("user", username, "not found");
-      // Redirect to register page if user is not found
+    // Case: user not found
+    if (!entries || entries.length === 0) {
+      console.log("User", username, "not found");
       return res.render("user/register");
+    }
+
+    // Case: user entry exists but malformed (should never happen)
+    const userRecord = entries[0];
+
+    if (!userRecord || typeof userRecord.password !== "string") {
+      console.warn(`Malformed user record for ${username}:`, userRecord);
+      return res.status(500).send("Internal Server Error");
     }
 
     const hashedPassword = entries[0]?.password;
