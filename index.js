@@ -4,7 +4,6 @@ import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 import mustache from "mustache-express";
 import router from "./routes/guestbookRoutes.js";
-import "./loadEnv.js"; // Ensure environment variables are loaded early
 
 const app = express();
 
@@ -29,16 +28,10 @@ const bootstrapJs = path.join(
   "js"
 );
 
-// Trust proxy (useful if deployed behind reverse proxy like Nginx/Heroku)
-app.set("trust proxy", 1);
-
 // Static assets
 app.use(express.static(publicFolder));
 app.use("/css", express.static(bootstrapCss));
 app.use("/js", express.static(bootstrapJs));
-
-// Cookie parsing
-app.use(cookieParser());
 
 // Body parsing for forms (application/x-www-form-urlencoded)
 app.use(express.urlencoded({ extended: true }));
@@ -54,18 +47,6 @@ app.set("views", path.join(__dirname, "views"));
 
 // Routes
 app.use("/", router);
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).render("errors/404", { title: "Page Not Found" });
-});
-
-// Generic error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  console.error("Unhandled error:", err);
-  res.status(500).render("errors/500", { title: "Server Error" });
-});
 
 // Start server
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
