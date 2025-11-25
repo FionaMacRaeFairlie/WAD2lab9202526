@@ -55,18 +55,6 @@ app.set("views", path.join(__dirname, "views"));
 // Routes
 app.use("/", router);
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).render("errors/404", { title: "Page Not Found" });
-});
-
-// Generic error handler
-// eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
-  console.error("Unhandled error:", err);
-  res.status(500).render("errors/500", { title: "Server Error" });
-});
-
 // Start server
 const port = process.env.PORT ? Number(process.env.PORT) : 3000;
 app.listen(port, () => {

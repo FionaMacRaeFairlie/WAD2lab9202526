@@ -1,0 +1,35 @@
+<html>
+  <head>
+    {{> header}}
+  </head>
+  <body>
+    <h1>{{ title }}</h1>
+    <div class="text-end" style="margin-bottom: 1em">
+      <a id="login" href="/login" class="btn btn-primary"> Sign in </a>
+      <a id="register" href="/register" class="btn btn-primary"> Register </a>
+      <!-- <a id="logout" href="/logout" class="btn btn-primary"> Sign out </a> -->
+    </div>
+    <div class="text-end">
+      <a href="/new" class="btn btn-primary"> Write in the guestbook </a>
+    </div>
+    {{# entries }}
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">{{ subject }}</h4>
+        <p class="card-text">{{ contents }}</p>
+        <div class="card-footer">
+          <p>
+            Written by <a href="/posts/{{ author }}">{{ author }}</a
+            >, on {{ published }}
+          </p>
+          <!-- Written by <a href="/comments/?author={{ author }}">{{ author }}</a
+          >, on {{ published }} -->
+        </div>
+      </div>
+    </div>
+    {{/ entries }}
+    {{^entries}}
+    No entries yet.
+    {{/entries}}
+  </body>
+</html>
