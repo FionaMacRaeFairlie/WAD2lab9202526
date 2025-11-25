@@ -61,7 +61,7 @@ export const post_new_entry = async (req, res) => {
       req.body.subject,
       req.body.contents
     );
-    res.redirect("/loggedIn");
+    res.redirect("/");
   } catch (err) {
     console.error("Error adding entry:", err);
     res.status(500).send("Failed to add entry");
