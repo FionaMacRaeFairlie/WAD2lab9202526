@@ -19,7 +19,7 @@ export const login = async (req, res, next) => {
 
     if (!username || !password) {
       // Missing credentials
-      return res.status(400).render("user/login");
+      return res.status(400).render("login");
     }
 
     const entries = await userdb.lookup(username);
@@ -41,7 +41,7 @@ export const login = async (req, res, next) => {
     const hashedPassword = entries[0]?.password;
     if (!hashedPassword) {
       console.warn(`No password hash stored for user ${username}`);
-      return res.status(403).render("user/login");
+      return res.status(403).render("login");
     }
 
     // bcrypt.compare returns a Promise when no callback is provided

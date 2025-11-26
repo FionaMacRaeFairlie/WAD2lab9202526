@@ -2,6 +2,8 @@ import express from "express";
 import * as controller from "../controllers/guestbookControllers.js";
 import { login, verify } from "../auth/auth.js";
 
+// ...
+
 const router = express.Router();
 console.log("login middleware:", login);
 
