@@ -28,11 +28,13 @@ export const static_landing_page = (req, res) => {
 
 // Landing page - show all entries
 export const landing_page = async (req, res) => {
+  let user = req.user.username || "Guest";
   try {
     const list = await guestbookdb.getAllEntries();
-    res.render("entries", {
+    res.render("guestbook", {
       title: "Guest Book",
       entries: list,
+      user: user,
     });
   } catch (err) {
     console.error("Error fetching entries:", err);
@@ -73,7 +75,7 @@ export const show_user_entries = async (req, res) => {
   const user = req.params.author;
   try {
     const entries = await guestbookdb.getEntriesByUser(user);
-    res.render("entries", {
+    res.render("guestbook", {
       title: "Guest Book",
       user: "user",
       entries,
@@ -117,10 +119,11 @@ export const post_new_user = async (req, res) => {
 // Logged-in landing page
 export const loggedIn_landing = async (req, res) => {
   try {
+    let user = req.user.username || "Guest";
     const list = await guestbookdb.getAllEntries();
-    res.render("entries", {
+    res.render("guestbook", {
       title: "Guest Book",
-      user: "user",
+      user: user,
       entries: list,
     });
   } catch (err) {
@@ -138,7 +141,7 @@ export const entries_list = async (req, res) => {
   try {
     const list = await guestbookdb.getAllEntries();
     // res.json(list);
-    res.render("entries", {
+    res.render("guestbook", {
       title: "Guest Book",
       entries: list,
     });

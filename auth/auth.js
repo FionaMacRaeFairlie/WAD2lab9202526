@@ -9,9 +9,6 @@ import "../loadEnv.js";
  *
  */
 
-// const user = await this.db.findOne({ user: username });
-// return user; // returns null if not found
-
 export const login = async (req, res, next) => {
   try {
     const username = req.body?.username;
@@ -79,10 +76,6 @@ export const login = async (req, res, next) => {
   }
 };
 
-/**
- * Verify middleware: checks the JWT cookie and allows the request if valid.
- * Adds `req.user` containing the decoded payload.
- */
 export const verify = (req, res, next) => {
   const accessToken = req.cookies?.jwt;
 
@@ -94,9 +87,10 @@ export const verify = (req, res, next) => {
     const payload = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
     // Attach user info to the request for downstream handlers
     req.user = payload;
+    console.log("Verified user:", payload);
+    console.log("req.user set to:", req.user);
     return next();
   } catch (e) {
-    // Token invalid/expired
     return res.status(401).send();
   }
 };

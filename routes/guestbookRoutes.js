@@ -10,9 +10,6 @@ console.log("login middleware:", login);
 router.get("/", controller.entries_list);
 router.get("/guestbook", controller.entries_list);
 
-router.get("/new", controller.show_new_entries);
-router.post("/new", controller.post_new_entry);
-
 // Authentication routes
 router.get("/login", controller.show_login);
 router.post("/login", login, controller.handle_login);
