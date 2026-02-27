@@ -61,13 +61,16 @@ export const login = async (req, res, next) => {
     const accessToken = jwt.sign(payload, secret, { expiresIn: 300 });
 
     // Set cookie with secure defaults
+    // Values for the SameSite attribute include "strict", "lax", or "none"
+    //  "lax" enables only first-party cookies to be sent/accessed.
+    //  "strict" is a subset of "lax" and won't fire if the incoming link is from an external site.
     res.cookie("jwt", accessToken, {
       httpOnly: true,
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production", //This setting configures the Secure flag on a cookie to only enable when the application runs in a production environment, requiring HTTPS. It ensures cookies are transmitted securely over encrypted connections in production, while allowing them to be sent over HTTP during development
       maxAge: 300 * 1000, // 5 minutes
     });
-
+    req.user = payload; // Attach user info to the request for downstream handlers
     // Proceed to next middleware/route handler
     return next();
   } catch (err) {

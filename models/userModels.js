@@ -33,16 +33,19 @@ class UserList {
     return this;
   }
 
-  // Create a new user with hashed password
   async create(username, password) {
+    const hash = await bcrypt.hash(password, saltRounds);
+
+    const entry = {
+      user: username,
+      password: hash,
+    };
+    console.log(`Creating user ${username} with hashed password`);
     try {
-      const hash = await bcrypt.hash(password, saltRounds);
-      const entry = { user: username, password: hash };
       const doc = await this.db.insert(entry);
-      console.log(`User ${username} created`);
       return doc;
     } catch (err) {
-      console.error(`Can't insert user ${username}:`, err);
+      console.error(`Error inserting user ${username}:`, err);
       throw err;
     }
   }

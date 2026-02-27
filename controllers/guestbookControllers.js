@@ -15,9 +15,11 @@ export const show_login = (req, res) => {
 
 // Handle login
 export const handle_login = (req, res) => {
+  let user = req.user?.username || "Guest";
+  console.log("User logged in:", user);
   res.render("newEntry", {
     title: "Guest Book",
-    user: "user",
+    user: user,
   });
 };
 
@@ -44,9 +46,10 @@ export const landing_page = async (req, res) => {
 
 // Show new entry form
 export const show_new_entries = (req, res) => {
+  let user = req.user.username || "Guest";
   res.render("newEntry", {
     title: "Guest Book",
-    user: "user",
+    user: user,
   });
 };
 
@@ -97,22 +100,23 @@ export const post_new_user = async (req, res) => {
   const password = req.body.pass;
 
   if (!user || !password) {
-    res.status(401).send("No user or no password");
-    return;
+    return res.status(401).send("No user or no password");
   }
 
   try {
     const existingUser = await userdb.lookup(user);
+
     if (existingUser.length !== 0) {
-      res.status(401).send(`User exists: ${user}`);
-      return;
+      return res.status(401).send(`User exists: ${user}`);
     }
+
+    // Create the user
     await userdb.create(user, password);
     console.log("Registered user:", user);
-    res.redirect("/login");
+    return res.redirect("/login");
   } catch (err) {
     console.error("Error creating user:", err);
-    res.status(500).send("Internal Server Error");
+    return res.status(500).send("Internal Server Error");
   }
 };
 
